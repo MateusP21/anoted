@@ -11,7 +11,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <main className="p-4">
+      <main className="p-4 grid gap-4 grid-cols-auto-fill items-center">
+        <NoteCard />
+        <NoteCard />
         <NoteCard />
       </main>
     </div>
