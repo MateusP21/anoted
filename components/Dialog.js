@@ -1,8 +1,8 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { forwardRef, Fragment, useState, useImperativeHandle } from 'react';
 
-export default function MyModal() {
-  let [isOpen, setIsOpen] = useState(true);
+const MyModal = forwardRef((_, ref) => {
+  const [isOpen, setIsOpen] = useState(true);
 
   function closeModal() {
     setIsOpen(false);
@@ -12,18 +12,12 @@ export default function MyModal() {
     setIsOpen(true);
   }
 
+  useImperativeHandle(ref, () => ({
+    openModal: openModal,
+  }));
+
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center">
-        <button
-          type="button"
-          onClick={openModal}
-          className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-        >
-          Open dialog
-        </button>
-      </div>
-
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
@@ -80,4 +74,8 @@ export default function MyModal() {
       </Transition>
     </>
   );
-}
+});
+
+MyModal.displayName = 'MyModal';
+
+export default MyModal;

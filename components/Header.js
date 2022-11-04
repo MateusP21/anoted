@@ -1,8 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { Plus } from 'phosphor-react';
-
+import { createRef, useRef } from 'react';
 import MyDialog from './Dialog';
 const Header = () => {
+  const modalRef = useRef();
+  const handleModal = () => {
+    modalRef.current.openModal();
+  };
   return (
     <>
       <header className="flex items-center bg-green-100 border-2 border-black justify-between p-2 m-4 ">
@@ -22,11 +26,16 @@ const Header = () => {
             title="Add Note"
             className="bg-yellow-400 p-1 border-2 border-black flex items-center"
           >
-            <Plus size={16} color="#0f0000" weight="bold" />
+            <Plus
+              size={16}
+              onClick={handleModal}
+              color="#0f0000"
+              weight="bold"
+            />
           </button>
         </div>
       </header>
-      <MyDialog />
+      <MyDialog ref={modalRef} />
     </>
   );
 };
