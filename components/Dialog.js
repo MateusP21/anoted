@@ -43,27 +43,35 @@ const MyModal = forwardRef((_, ref) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden  bg-white border-2 border-black p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Payment successful
+                    O que você está pensando agora?
                   </Dialog.Title>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Your payment has been successfully submitted. We’ve sent
-                      you an email with all of the details of your order.
-                    </p>
+                  <div className="mt-4">
+                    <form className="flex flex-col gap-2">
+                      <input
+                        type="text"
+                        placeholder="Titulo"
+                        className="border-2 border-black p-2 w-full"
+                      />
+                      <textarea
+                        type="text"
+                        placeholder="Me conta um pouco sobre isso..."
+                        className="border-2 border-black p-2 resize-none w-full h-96"
+                      />
+                    </form>
                   </div>
 
                   <div className="mt-4">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center  transition-colors px-4 py-2 text-sm font-medium border-2 border-black hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
-                      Got it, thanks!
+                      Guardar Nota
                     </button>
                   </div>
                 </Dialog.Panel>
