@@ -1,7 +1,7 @@
 import { ArrowRight } from 'phosphor-react';
 const NoteCard = () => {
   return (
-    <section className="shadow-[6px_6px] h-48 flex flex-col border-2 border-black p-4 gap-2">
+    <section className="hover:shadow-[6px_6px] transition-shadow bg-white h-48 flex flex-col border-4 border-black p-4 gap-2">
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <h1 className="font-bold text-2xl truncate">Importante !</h1>
