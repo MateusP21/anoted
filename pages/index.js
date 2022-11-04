@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Head from 'next/head';
-
+import { Plus } from 'phosphor-react';
 export default function Home() {
   return (
     <div className="bg-white">
@@ -25,8 +25,10 @@ export default function Home() {
         <div>
           <button
             title="Add Note"
-            class="bg-yellow-400 px-1 py-0 border-2 border-black"
-          ></button>
+            class="bg-yellow-400 p-1 border-2 border-black flex items-center"
+          >
+            <Plus size={16} color="#0f0000" weight="bold" />
+          </button>
         </div>
       </header>
     </div>
