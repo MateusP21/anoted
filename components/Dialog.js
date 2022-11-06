@@ -1,9 +1,12 @@
 import { Dialog, Transition } from '@headlessui/react';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import { forwardRef, Fragment, useState, useImperativeHandle } from 'react';
+import { db } from '../services/firebase';
 
 const MyModal = forwardRef((_, ref) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
   function closeModal() {
     setIsOpen(false);
   }
@@ -15,6 +18,21 @@ const MyModal = forwardRef((_, ref) => {
   useImperativeHandle(ref, () => ({
     openModal: openModal,
   }));
+
+  const saveNote = async () => {
+    console.log('hello');
+    const note = {
+      title,
+      body,
+    };
+
+    try {
+      await addDoc(collection(db, 'note'), note);
+      console.log('dados salvos');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -54,24 +72,35 @@ const MyModal = forwardRef((_, ref) => {
                     <form className="flex flex-col gap-2">
                       <input
                         type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                         placeholder="Titulo"
                         className="border-2 border-black p-2 w-full"
                       />
                       <textarea
                         type="text"
+                        value={body}
+                        onChange={(e) => setBody(e.target.value)}
                         placeholder="Me conta um pouco sobre isso..."
                         className="border-2 border-black p-2 resize-none w-full h-96"
                       />
                     </form>
                   </div>
 
-                  <div className="mt-4">
+                  <div className="mt-4 flex gap-2">
                     <button
                       type="button"
                       className="inline-flex justify-center  transition-colors px-4 py-2 text-sm font-medium border-2 border-black hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
+                      onClick={saveNote}
                     >
                       Guardar Nota
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex justify-center  transition-colors px-4 py-2 text-sm font-medium border-2 border-black hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      onClick={closeModal}
+                    >
+                      Cancelar
                     </button>
                   </div>
                 </Dialog.Panel>
@@ -84,6 +113,5 @@ const MyModal = forwardRef((_, ref) => {
   );
 });
 
-MyModal.displayName = 'MyModal';
-
+MyModal.displayName = 'Note Modal';
 export default MyModal;
