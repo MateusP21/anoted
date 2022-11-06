@@ -1,8 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
+import { collection, getDocs } from 'firebase/firestore';
 import Head from 'next/head';
 import Header from '../components/Header';
 import NoteCard from '../components/NoteCard';
-export default function Home() {
+import { db } from '../services/firebase';
+
+export default function Home({ notes }) {
   return (
     <div>
       <Head>
@@ -12,10 +15,19 @@ export default function Home() {
       </Head>
       <Header />
       <main className="p-4 grid gap-4 grid-cols-auto-fill items-center">
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
+        {notes.map((note) => (
+          <NoteCard key={note.id} title={note.title} body={note.body} />
+        ))}
       </main>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const collectionRef = collection(db, 'note');
+  const data = await getDocs(collectionRef);
+  const notes = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  return {
+    props: { notes }, // will be passed to the page component as props
+  };
 }
