@@ -20,7 +20,6 @@ const MyModal = forwardRef((_, ref) => {
   }));
 
   const saveNote = async () => {
-    console.log('hello');
     const note = {
       title,
       body,
@@ -28,7 +27,7 @@ const MyModal = forwardRef((_, ref) => {
 
     try {
       await addDoc(collection(db, 'note'), note);
-      console.log('dados salvos');
+      closeModal();
     } catch (error) {
       console.log(error);
     }
