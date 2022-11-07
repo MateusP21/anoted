@@ -2,8 +2,12 @@ import { Dialog, Transition } from '@headlessui/react';
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import { forwardRef, Fragment, useState, useImperativeHandle } from 'react';
 import { db } from '../services/firebase';
-
+import { useRouter } from 'next/router';
 const MyModal = forwardRef((_, ref) => {
+  const router = useRouter();
+  const forceReload = () => {
+    router.reload();
+  };
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -28,6 +32,7 @@ const MyModal = forwardRef((_, ref) => {
     try {
       await addDoc(collection(db, 'note'), note);
       closeModal();
+      forceReload();
     } catch (error) {
       console.log(error);
     }

@@ -28,6 +28,6 @@ export async function getStaticProps() {
   const data = await getDocs(collectionRef);
   const notes = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   return {
-    props: { notes }, // will be passed to the page component as props
+    props: { notes },
   };
 }
