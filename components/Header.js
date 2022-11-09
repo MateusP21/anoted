@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import { Plus } from 'phosphor-react';
+import { signOut } from 'next-auth/react';
+import { Plus, SignOut } from 'phosphor-react';
 import { useRef } from 'react';
 import MyDialog from './Dialog';
 const Header = () => {
@@ -24,7 +25,7 @@ const Header = () => {
             <h2 className="text-lg font-bold">Mateus!</h2>
           </div>
         </div>
-        <div>
+        <div className="flex gap-2">
           <button
             title="Add Note"
             className="bg-[#F9B803] p-1  border-2 border-black shadow-[2px_2px] flex items-center"
@@ -32,6 +33,17 @@ const Header = () => {
             <Plus
               size={20}
               onClick={handleModal}
+              color="#0f0000"
+              weight="bold"
+            />
+          </button>
+          <button
+            title="Sign Out"
+            className="bg-[#0365f9] p-1  border-2 border-black shadow-[2px_2px] flex items-center"
+          >
+            <SignOut
+              size={20}
+              onClick={() => signOut()}
               color="#0f0000"
               weight="bold"
             />
