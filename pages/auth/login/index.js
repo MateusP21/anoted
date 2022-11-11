@@ -1,7 +1,6 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Auth, ThemeSupa } from '@supabase/auth-ui-react';
-import { useState } from 'react';
 
 export default function SignIn() {
   const supabase = useSupabaseClient();
