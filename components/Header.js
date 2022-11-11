@@ -3,7 +3,7 @@ import { signOut } from 'next-auth/react';
 import { Plus, SignOut } from 'phosphor-react';
 import { useRef } from 'react';
 import MyDialog from './Dialog';
-const Header = () => {
+const Header = ({ username }) => {
   const modalRef = useRef();
   const handleModal = () => {
     modalRef.current.openModal();
@@ -22,7 +22,7 @@ const Header = () => {
 
           <div>
             <p className="text-sm">Hello 👋</p>
-            <h2 className="text-lg font-bold">Mateus!</h2>
+            <h2 className="text-lg font-bold">{username}!</h2>
           </div>
         </div>
         <div className="flex gap-2">
