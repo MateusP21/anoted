@@ -1,13 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import { collection, getDocs } from 'firebase/firestore';
+
 import { getSession, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Header from '../components/Header';
 import NoteCard from '../components/NoteCard';
-import { db } from '../services/firebase';
+
 
 export default function Home({ notes }) {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
   return (
     <div>

@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { auth } from '../../../services/firebase';
+
 
 const options = {
   providers: [
@@ -15,17 +15,12 @@ const options = {
       },
       async authorize(credentials) {
         try {
-          const { user } = await signInWithEmailAndPassword(
-            auth,
-            credentials.email,
-            credentials.password
-          );
 
-          if (user) {
-            return { name: 'Minesota', email: user.email };
-          } else {
-            return null;
-          }
+          // if (user) {
+          //   return { name: 'Minesota', email: user.email };
+          // } else {
+          //   return null;
+          // }
         } catch (e) {
           throw new Error('There was an error on user authentication');
         }
@@ -34,11 +29,11 @@ const options = {
   ],
 
   callbacks: {
-    async session({ session, token, user }) {
-      // Send properties to the client, like an access_token and user id from a provider.
+    // async session({ session, token, user }) {
+    //   // Send properties to the client, like an access_token and user id from a provider.
 
-      return session;
-    },
+    //   return session;
+    // },
   },
 
   session: {
