@@ -1,14 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 
-import { getSession, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import Header from '../components/Header';
 import NoteCard from '../components/NoteCard';
 
-
 export default function Home({ notes }) {
-  // const { data: session } = useSession();
-
   return (
     <div>
       <Head>
@@ -24,21 +20,4 @@ export default function Home({ notes }) {
       </main>
     </div>
   );
-}
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/signin',
-      },
-    };
-  }
-  const collectionRef = collection(db, 'note');
-  const data = await getDocs(collectionRef);
-  const notes = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-  return {
-    props: { notes, session },
-  };
 }

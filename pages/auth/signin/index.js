@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getSession, signIn } from 'next-auth/react';
+
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,7 +29,6 @@ export default function SignIn() {
         </div>
         <button
           type="submit"
-          onClick={() => signIn('credentials', { email, password })}
           className="bg-white border-4 border-black font-bold py-1 px-2 shadow-lg "
         >
           Fazer login
@@ -37,22 +36,4 @@ export default function SignIn() {
       </div>
     </div>
   );
-}
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-
-  if (session) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: {
-      session,
-    },
-  };
 }
