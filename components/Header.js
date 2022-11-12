@@ -1,16 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
-import { signOut } from 'next-auth/react';
-import { Plus, SignOut } from 'phosphor-react';
+
+import { Plus, SignOut, UserCircle } from 'phosphor-react';
 import { useRef } from 'react';
+import { AppProvider } from '../context/AppContext';
 import MyDialog from './Dialog';
+
 const Header = ({ username }) => {
   const modalRef = useRef();
+
   const handleModal = () => {
     modalRef.current.openModal();
   };
+
   return (
     <>
-      <header className="flex items-center  justify-between p-2 m-4 ">
+      <header className="flex items-center justify-between p-2 m-4 bg-white border-2 border-black ">
         <div className="flex gap-4">
           <div className="flex items-center border-4 border-black w-12 h-12">
             <img
@@ -28,7 +32,7 @@ const Header = ({ username }) => {
         <div className="flex gap-2">
           <button
             title="Add Note"
-            className="bg-[#F9B803] p-1  border-2 border-black shadow-[2px_2px] flex items-center"
+            className="bg-yellow-500 p-1 border-2 border-black shadow-[2px_2px] flex items-center"
           >
             <Plus
               size={20}
@@ -38,12 +42,23 @@ const Header = ({ username }) => {
             />
           </button>
           <button
+            title="User Profile"
+            className="bg-red-500 p-1  border-2 border-black shadow-[2px_2px] flex items-center"
+          >
+            <UserCircle
+              size={20}
+              onClick={() => signOut()}
+              color="#0f0000"
+              weight="bold"
+            />
+          </button>
+          <button
             title="Sign Out"
-            className="bg-[#0365f9] p-1  border-2 border-black shadow-[2px_2px] flex items-center"
+            className="bg-blue-500 p-1  border-2 border-black shadow-[2px_2px] flex items-center"
           >
             <SignOut
               size={20}
-              onClick={() => signOut()}
+              onClick={() => supabase.auth.signOut()}
               color="#0f0000"
               weight="bold"
             />
@@ -55,3 +70,26 @@ const Header = ({ username }) => {
   );
 };
 export default Header;
+
+export const getServerSideProps = async (ctx) => {
+  // Create authenticated Supabase Client
+  const supabase = createServerSupabaseClient(ctx);
+  // Check if we have a session
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const { data } = await supabase
+    .from('profiles')
+    .select('username')
+    .eq('id', session.user.id);
+
+  const [{ username }] = data;
+
+  return {
+    props: {
+      user: session.user,
+      username: username || '',
+    },
+  };
+};
