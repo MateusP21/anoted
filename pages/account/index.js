@@ -72,49 +72,74 @@ export default function Account({ user }) {
   }
 
   return (
-    <div className="form-widget">
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="text" value={user.email} disabled />
-      </div>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          value={username || ''}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="website">Website</label>
-        <input
-          id="website"
-          type="website"
-          value={website || ''}
-          onChange={(e) => setWebsite(e.target.value)}
-        />
-      </div>
+    <>
+      <section className="p-4 flex items-center justify-center">
+        <div className="bg-blue-100 w-full max-w-4xl p-4 flex flex-col gap-8 border-2 border-black">
+          <div className="flex flex-col gap-1">
+            <label
+              htmlFor="email"
+              className="text-xs uppercase font-bold tracking-wide"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              type="text"
+              className="border-2 border-black p-2 transition-all outline-none focus:shadow-[2px_2px] "
+              value={user.email}
+              disabled
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label
+              htmlFor="username"
+              className="text-xs uppercase font-bold tracking-wide"
+            >
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              className="border-2 border-black p-2 transition-all outline-none focus:shadow-[2px_2px]"
+              value={username || ''}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label
+              htmlFor="website"
+              className="text-xs uppercase font-bold tracking-wide"
+            >
+              Website
+            </label>
+            <input
+              id="website"
+              type="website"
+              className="border-2 border-black p-2 transition-all outline-none focus:shadow-[2px_2px]"
+              value={website || ''}
+              onChange={(e) => setWebsite(e.target.value)}
+            />
+          </div>
 
-      <div>
-        <button
-          className="button primary block"
-          onClick={() => updateProfile({ username, website, avatar_url })}
-          disabled={loading}
-        >
-          {loading ? 'Loading ...' : 'Update'}
-        </button>
-      </div>
+          <div className="grid grid-cols-2  gap-2">
+            <button
+              className="bg-[#F9B803] text-center p-1 border-2 border-black hover:shadow-none transition-all hover:font-semibold shadow-[2px_2px] "
+              onClick={() => updateProfile({ username, website, avatar_url })}
+              disabled={loading}
+            >
+              {loading ? 'Loading ...' : 'Update'}
+            </button>
 
-      <div>
-        <button
-          className="button block"
-          onClick={() => supabase.auth.signOut()}
-        >
-          Sign Out
-        </button>
-      </div>
-    </div>
+            <button
+              className="bg-red-400 text-center w-full hover:font-semibold p-1 border-2 border-black hover:shadow-none transition-all shadow-[2px_2px] "
+              onClick={() => supabase.auth.signOut()}
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
 
