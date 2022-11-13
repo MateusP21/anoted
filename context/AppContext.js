@@ -38,8 +38,10 @@ export function AppProvider(props) {
     setUsername(username);
   };
   useEffect(() => {
-    getUserInfo();
-  }, [getUserInfo, username]);
+    if (session) {
+      getUserInfo();
+    }
+  }, [getUserInfo, username, session]);
 
   return (
     <AppContext.Provider value={{ username, setUsername }}>
