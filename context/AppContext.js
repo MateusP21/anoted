@@ -4,34 +4,45 @@ import {
   useUser,
 } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
-import { createContext } from 'react';
+import { createContext, useState } from 'react';
 import { useEffect } from 'react';
-const AppContext = createContext();
+export const AppContext = createContext();
 
 export function AppProvider(props) {
   const supabase = useSupabaseClient();
+  const session = useSession();
+  const [username, setUsername] = useState('');
   const router = useRouter();
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
+      console.log(event);
       switch (event) {
         case 'SIGNED_OUT':
           router.push('/auth/login');
-          break;
-        case 'SIGNED_IN':
-          router.push('/');
-          break;
-        case 'USER_UPDATED':
-          router.push('/');
           break;
         default:
           break;
       }
     });
-  }, [router, supabase.auth]);
+  }, [supabase.auth]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getUserInfo = async () => {
+    const { data } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('id', session.user.id);
+
+    const [{ username }] = data;
+    setUsername(username);
+  };
+  useEffect(() => {
+    getUserInfo();
+  }, [getUserInfo, username]);
 
   return (
-    <AppContext.Provider value={{ userInfo }}>
+    <AppContext.Provider value={{ username, setUsername }}>
       {props.children}
     </AppContext.Provider>
   );

@@ -1,11 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Plus, SignOut, UserCircle } from 'phosphor-react';
-import { useRef } from 'react';
-import { AppProvider } from '../context/AppContext';
+import { useContext, useRef } from 'react';
+import { AppContext } from '../context/AppContext';
 import MyDialog from './Dialog';
 
-const Header = ({ username }) => {
+const Header = () => {
+  const supabase = useSupabaseClient();
+  const data = useContext(AppContext);
   const modalRef = useRef();
 
   const handleModal = () => {
@@ -26,8 +31,13 @@ const Header = ({ username }) => {
 
           <div>
             <p className="text-sm">Hello 👋</p>
-            <h2 className="text-lg font-bold">{username}!</h2>
+            <h2 className="text-lg font-bold">{data.username}!</h2>
           </div>
+        </div>
+        <div>
+          <h1 className="text-2xl tracking-widest font-bold border-4 px-2 border-black hover:bg-black hover:text-white transition-all cursor-pointer">
+            <Link href={'/'}> ANOTED</Link>
+          </h1>
         </div>
         <div className="flex gap-2">
           <button
@@ -41,17 +51,14 @@ const Header = ({ username }) => {
               weight="bold"
             />
           </button>
-          <button
-            title="User Profile"
-            className="bg-red-500 p-1  border-2 border-black shadow-[2px_2px] flex items-center"
-          >
-            <UserCircle
-              size={20}
-              onClick={() => signOut()}
-              color="#0f0000"
-              weight="bold"
-            />
-          </button>
+          <Link href={'/account'}>
+            <button
+              title="User Profile"
+              className="bg-red-500 p-1  border-2 border-black shadow-[2px_2px] flex items-center"
+            >
+              <UserCircle size={20} color="#0f0000" weight="bold" />
+            </button>
+          </Link>
           <button
             title="Sign Out"
             className="bg-blue-500 p-1  border-2 border-black shadow-[2px_2px] flex items-center"
@@ -70,26 +77,3 @@ const Header = ({ username }) => {
   );
 };
 export default Header;
-
-export const getServerSideProps = async (ctx) => {
-  // Create authenticated Supabase Client
-  const supabase = createServerSupabaseClient(ctx);
-  // Check if we have a session
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  const { data } = await supabase
-    .from('profiles')
-    .select('username')
-    .eq('id', session.user.id);
-
-  const [{ username }] = data;
-
-  return {
-    props: {
-      user: session.user,
-      username: username || '',
-    },
-  };
-};
