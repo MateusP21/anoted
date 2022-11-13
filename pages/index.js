@@ -1,10 +1,27 @@
 /* eslint-disable @next/next/no-img-element */
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
 
 import NoteCard from '../components/NoteCard';
 
-export default function Home() {
+export default function Home({ user }) {
+  const supabase = useSupabaseClient();
+  const [notes, setNotes] = useState([]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getNotes = async () => {
+    try {
+      const { data, error } = await supabase.from('notes').select('*');
+      setNotes(data);
+      if (error) throw error;
+    } catch (error) {
+      if (error) throw error;
+    }
+  };
+  useEffect(() => {
+    getNotes();
+  }, [supabase, user.id, getNotes]);
   return (
     <div className="">
       <Head>
@@ -14,9 +31,9 @@ export default function Home() {
       </Head>
 
       <main className="p-4 grid gap-4 grid-cols-auto-fill items-center">
-        {/* {notes.map((note) => (
-          <NoteCard key={note.id} title={note.title} body={note.body} />
-        ))} */}
+        {notes.map((note) => (
+          <NoteCard key={note.id} title={note.title} body={note.content} />
+        ))}
       </main>
     </div>
   );
