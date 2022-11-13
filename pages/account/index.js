@@ -45,7 +45,6 @@ export default function Account({ user }) {
       alert('Profile updated!');
     } catch (error) {
       alert('Error updating the data!');
-      console.log(error);
     } finally {
       getProfile();
     }

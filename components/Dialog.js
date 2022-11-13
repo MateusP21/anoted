@@ -25,7 +25,6 @@ const MyModal = forwardRef((_, ref) => {
   }));
 
   const saveNote = async (data) => {
-    console.log(data);
     try {
       const { error } = await supabase.from('notes').insert([
         {
