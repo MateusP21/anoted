@@ -1,4 +1,5 @@
 import { ArrowRight } from 'phosphor-react';
+
 const NoteCard = ({ title, body }) => {
   return (
     <section className="hover:shadow-[6px_6px] transition-shadow bg-white h-48 flex flex-col border-4 border-black p-4 gap-2">

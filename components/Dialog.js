@@ -3,14 +3,15 @@ import { Dialog, Transition } from '@headlessui/react';
 import { forwardRef, Fragment, useState, useImperativeHandle } from 'react';
 
 import { useRouter } from 'next/router';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useForm } from 'react-hook-form';
 const MyModal = forwardRef((_, ref) => {
-  const router = useRouter();
-  const forceReload = () => {
-    router.reload();
-  };
+  const supabase = useSupabaseClient();
+  const session = useSession();
+  const { handleSubmit, register, reset } = useForm();
+
   const [isOpen, setIsOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -23,18 +24,22 @@ const MyModal = forwardRef((_, ref) => {
     openModal: openModal,
   }));
 
-  const saveNote = async () => {
-    const note = {
-      title,
-      body,
-    };
-
+  const saveNote = async (data) => {
+    console.log(data);
     try {
-  
-      closeModal();
-      forceReload();
+      const { error } = await supabase.from('notes').insert([
+        {
+          title: data.title,
+          content: data.content,
+          author_id: session.user.id,
+        },
+      ]);
+      if (error) throw error;
     } catch (error) {
-      console.log(error);
+      throw error;
+    } finally {
+      reset({ title: '', content: '' });
+      closeModal();
     }
   };
 
@@ -73,39 +78,38 @@ const MyModal = forwardRef((_, ref) => {
                     O que você está pensando agora?
                   </Dialog.Title>
                   <div className="mt-4">
-                    <form className="flex flex-col gap-2">
+                    <form
+                      onSubmit={handleSubmit(saveNote)}
+                      className="flex flex-col gap-2"
+                    >
                       <input
                         type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        {...register('title')}
                         placeholder="Titulo"
                         className="border-2 border-black p-2 w-full"
                       />
                       <textarea
                         type="text"
-                        value={body}
-                        onChange={(e) => setBody(e.target.value)}
+                        {...register('content')}
                         placeholder="Me conta um pouco sobre isso..."
                         className="border-2 border-black p-2 resize-none w-full h-96"
                       />
+                      <div className="mt-4 flex gap-2">
+                        <button
+                          type="submit"
+                          className="inline-flex justify-center  transition-colors px-4 py-2 text-sm font-medium border-2 border-black hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        >
+                          Guardar Nota
+                        </button>
+                        <button
+                          type="button"
+                          className="inline-flex justify-center  transition-colors px-4 py-2 text-sm font-medium border-2 border-black hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                          onClick={closeModal}
+                        >
+                          Cancelar
+                        </button>
+                      </div>
                     </form>
-                  </div>
-
-                  <div className="mt-4 flex gap-2">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center  transition-colors px-4 py-2 text-sm font-medium border-2 border-black hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={saveNote}
-                    >
-                      Guardar Nota
-                    </button>
-                    <button
-                      type="button"
-                      className="inline-flex justify-center  transition-colors px-4 py-2 text-sm font-medium border-2 border-black hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
-                    >
-                      Cancelar
-                    </button>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
