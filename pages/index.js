@@ -12,7 +12,10 @@ export default function Home({ user }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getNotes = async () => {
     try {
-      const { data, error } = await supabase.from('notes').select('*');
+      const { data, error } = await supabase
+        .from('notes')
+        .select('*')
+        .eq('author_id', user.id);
       setNotes(data);
       if (error) throw error;
     } catch (error) {

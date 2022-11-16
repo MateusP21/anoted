@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 body {
-  background-color: #e9deff;
+  background-color: #f5e0a4;
   height: calc(100vh - 20px);
 }

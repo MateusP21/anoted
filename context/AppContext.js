@@ -48,11 +48,15 @@ export function AppProvider(props) {
         setAvatarUrl(data.avatar_url);
       }
     } catch (error) {
-      alert('Error loading user data!');
+      console.log(error);
     } finally {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    getProfile();
+  }, [getProfile]);
 
   return (
     <AppContext.Provider value={{ username, setUsername, getProfile }}>

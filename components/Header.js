@@ -19,7 +19,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="flex items-center justify-between p-2 m-4 bg-white border-2 border-black ">
+      <header className="flex items-center justify-between p-2 m-4 bg-white border-4 border-black ">
         <div className="flex gap-4">
           <div className="flex items-center border-4 border-black w-12 h-12">
             <img
