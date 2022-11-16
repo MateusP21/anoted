@@ -1,9 +1,15 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { Auth, ThemeSupa } from '@supabase/auth-ui-react';
+import { useRouter } from 'next/router';
 
 export default function SignIn() {
   const supabase = useSupabaseClient();
+  const router = useRouter();
+  supabase.auth.onAuthStateChange(async (event) => {
+    if (event !== 'SIGNED_OUT') {
+      router.push('/');
+    }
+  });
   return (
     <div className="h-screen flex items-center bg-orange-400 justify-center">
       <section className="p-4 md:mt-4 w-full h-full md:h-max md:w-[24rem] mx-auto bg-slate-100 border-2 border-black">
@@ -11,7 +17,6 @@ export default function SignIn() {
           Anoted Login
         </h1>
         <Auth
-          redirectTo="/"
           showLinks={true}
           magicLink={true}
           supabaseClient={supabase}
@@ -34,31 +39,8 @@ export default function SignIn() {
               },
             },
           }}
-          theme="dark"
         />
       </section>
     </div>
   );
 }
-
-export const getServerSideProps = async (ctx) => {
-  // Create authenticated Supabase Client
-  const supabase = createServerSupabaseClient(ctx);
-  // Check if we have a session
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  if (session) {
-    return {
-      redirect: {
-        destination: '/account',
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: {
-      initialSession: session,
-    },
-  };
-};
