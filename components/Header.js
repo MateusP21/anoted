@@ -11,10 +11,18 @@ import MyDialog from './Dialog';
 const Header = () => {
   const supabase = useSupabaseClient();
   const data = useContext(AppContext);
+  const router = useRouter();
   const modalRef = useRef();
 
   const handleModal = () => {
     modalRef.current.openModal();
+  };
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+      router.push('/auth/login');
+    }
   };
 
   return (
@@ -65,7 +73,7 @@ const Header = () => {
           >
             <SignOut
               size={20}
-              onClick={() => supabase.auth.signOut()}
+              onClick={() => handleSignOut()}
               color="#0f0000"
               weight="bold"
             />
