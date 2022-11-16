@@ -40,11 +40,9 @@ export default function Account({ user }) {
         avatar_url,
         updated_at: new Date().toISOString(),
       };
-      let { error } = await supabase.from('profiles').upsert(updates);
-      if (error) throw error;
-      alert('Profile updated!');
+      await supabase.from('profiles').upsert(updates);
     } catch (error) {
-      alert('Error updating the data!');
+      throw error;
     } finally {
       getProfile();
     }

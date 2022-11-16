@@ -12,12 +12,11 @@ export default function Home({ user }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const getNotes = async () => {
     try {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('notes')
         .select('*')
         .eq('author_id', user.id);
       setNotes(data);
-      if (error) throw error;
     } catch (error) {
       if (error) throw error;
     }
@@ -49,6 +48,25 @@ export const getServerSideProps = async (ctx) => {
   const {
     data: { session },
   } = await supabase.auth.getSession();
+
+  try {
+    let {
+      data: { username },
+    } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('id', session.user.id);
+    if (!username) {
+      return {
+        redirect: {
+          destination: '/account',
+          permanent: false,
+        },
+      };
+    }
+  } catch (error) {
+    throw error;
+  }
 
   if (!session)
     return {
