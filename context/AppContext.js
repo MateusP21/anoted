@@ -3,7 +3,8 @@ import {
   useSupabaseClient,
   useUser,
 } from '@supabase/auth-helpers-react';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
+
 import { createContext, useState } from 'react';
 import { useEffect } from 'react';
 export const AppContext = createContext();
@@ -11,23 +12,11 @@ export const AppContext = createContext();
 export function AppProvider(props) {
   const supabase = useSupabaseClient();
   const session = useSession();
+  const router = useRouter();
   const [username, setUsername] = useState(null);
   const [website, setWebsite] = useState(null);
   const [loading, setLoading] = useState(true);
   const [avatar_url, setAvatarUrl] = useState(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
-      switch (event) {
-        case 'SIGNED_OUT':
-          router.push('/auth/login');
-          break;
-        default:
-          break;
-      }
-    });
-  }, [supabase.auth]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   async function getProfile() {
@@ -48,7 +37,7 @@ export function AppProvider(props) {
         setAvatarUrl(data.avatar_url);
       }
     } catch (error) {
-      console.log(error);
+      throw error;
     } finally {
       setLoading(false);
     }
